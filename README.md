@@ -6,7 +6,7 @@ Pioneer is a Unity-based educational game designed to introduce 14-17 year olds 
 ---
 
 ## 🛠 Tech Stack
-* **Engine:** Unity 2022.3 LTS (or specify your version)
+* **Engine:** Unity 6000.3.9f1 
 * **Language:** C# (Unity Backend), Python (Player Scripts via Brython)
 * **Platform:** WebGL
 * **Version Control:** Git + Git LFS
@@ -17,7 +17,7 @@ Pioneer is a Unity-based educational game designed to introduce 14-17 year olds 
 
 ### 1. Prerequisites
 * Install [Git LFS](https://git-lfs.com/). **This is mandatory** to handle 3D assets.
-* Unity Hub & Unity Editor (Version: [Insert Version]).
+* Unity Hub & Unity Editor (Version: 6000.3.9f1).
 
 ### 2. Setup
 1. Clone the repository:
