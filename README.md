@@ -21,7 +21,7 @@ Pioneer is a Unity-based educational game designed to introduce 14-17 year olds 
 
 ### 2. Setup
 1. Clone the repository:
-   `git clone https://github.com/[Your-Username]/pioneer.git`
+   `git clone https://github.com/atinyduck/pioneer.git`
 2. Initialize LFS:
    `git lfs install`
    `git lfs pull`
