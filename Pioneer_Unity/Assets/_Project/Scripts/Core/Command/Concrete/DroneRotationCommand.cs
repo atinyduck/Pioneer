@@ -26,7 +26,17 @@ namespace Pioneer.Commands.Concrete
         // --- METHODS ---
         public IEnumerator Execute()
         {
-            return null;
+            float duration = Mathf.Abs(angle) / speed;
+            Quaternion startRotation = droneTransform.rotation;
+            Quaternion targetRotation = startRotation * Quaternion.Euler(0, angle, 0);
+
+            float elapsedTime = 0f;
+            while (elapsedTime < duration)
+            {
+                droneTransform.rotation = Quaternion.Slerp(startRotation, targetRotation, elapsedTime / duration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
         }
     }
 }
