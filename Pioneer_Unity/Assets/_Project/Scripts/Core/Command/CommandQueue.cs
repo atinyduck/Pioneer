@@ -69,7 +69,7 @@ public class CommandQueue : MonoBehaviour
     /// <summary>
     /// Coroutine that manages the execution of commands in the queue. It will execute each command sequentially, waiting for each command to finish before starting the next one. If the queue is paused or empty, it will wait until there are commands to execute or until it is resumed.
     /// </summary>
-    private IEnumerator ExecuteConnabdsCoroutine() { yield break; }
+    private IEnumerator ExecuteCommandsCoroutine() { yield break; }
 }
 
 // end of CommandQueue.cs
