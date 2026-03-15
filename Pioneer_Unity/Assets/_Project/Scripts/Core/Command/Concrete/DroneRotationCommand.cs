@@ -20,7 +20,7 @@ namespace Pioneer.Commands.Concrete
         {
             this.droneTransform = droneTransform;
             this.angle = angle;
-            this.speed = speed;
+            this.speed = speed <= 0 ? speed : 180f; // Ensure speed is not zero to avoid division by zero, default to 180 degrees/sec if invalid
         }
 
         // --- METHODS ---
@@ -37,6 +37,11 @@ namespace Pioneer.Commands.Concrete
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
+        }
+
+        public string GetCommandName()
+        {
+            return $"Rotate Drone by {angle} degrees at {speed} degrees/sec";
         }
     }
 }

@@ -18,6 +18,11 @@ namespace Pioneer.Commands
         /// Returns a coroutine that completes when the command finishes.
         /// </summary>
         IEnumerator Execute();
+
+        /// <summary>
+        /// Returns a human-readable string representation of the command.
+        /// </summary>
+        string GetCommandName();
     }
 }
 

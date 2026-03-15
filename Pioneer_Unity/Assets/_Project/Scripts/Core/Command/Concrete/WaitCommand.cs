@@ -24,6 +24,11 @@ namespace Pioneer.Commands.Concrete
         {
             yield return new WaitForSeconds(duration);
         }
+
+        public string GetCommandName()
+        {
+            return $"Wait for {duration} seconds";
+        }
     }
 }
 

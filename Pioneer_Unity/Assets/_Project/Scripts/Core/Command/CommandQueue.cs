@@ -36,16 +36,40 @@ public class CommandQueue : MonoBehaviour
     void Update() { }
 
     /// <summary>
+    /// Starts executing all queued commands sequentially.
+    /// If already executing, this will log a warning and return.
+    /// </summary>
+    public void Execute()
+    {
+        if (isExecuting)
+        {
+            Debug.LogWarning("Commands are already executing. Call Stop() first.");
+            return;
+        }
+
+        if (commandQueue.Count == 0)
+        {
+            Debug.LogWarning("No commands in queue to execute.");
+            return;
+        }
+
+        executionCoroutine = StartCoroutine(ExecuteCommandsCoroutine());
+    }
+
+    /// <summary>
     /// Adds a command to the end of the queue. Commands will be executed in the order they were added.
     /// </summary>
     /// <param name="command">The command to be enqueued.</param>
     public void EnqueueCommand(ICommand command)
     {
-        commandQueue.Enqueue(command);
-        if (!isExecuting)
+        if (command == null)
         {
-            executionCoroutine = StartCoroutine(ExecuteCommandsCoroutine());
+            Debug.LogError("Cannot enqueue null command");
+            return;
         }
+        
+        commandQueue.Enqueue(command);
+        Debug.Log($"Command enqueued. Queue size: {commandQueue.Count}");
     }
 
     /// <summary>
@@ -53,6 +77,7 @@ public class CommandQueue : MonoBehaviour
     /// </summary>
     public void DequeueCommand()
     {
+        
         if (commandQueue.Count > 0)
         {
             commandQueue.Dequeue();
@@ -64,7 +89,11 @@ public class CommandQueue : MonoBehaviour
     /// </summary>
     public void Pause()
     {
-        isPaused = true;
+        if (isExecuting && !isPaused)
+        {
+            isPaused = true;
+            Debug.Log("Command execution paused.");
+        }
     }
 
     /// <summary>
@@ -75,10 +104,7 @@ public class CommandQueue : MonoBehaviour
         if (isPaused)
         {
             isPaused = false;
-            if (!isExecuting && commandQueue.Count > 0)
-            {
-                executionCoroutine = StartCoroutine(ExecuteCommandsCoroutine());
-            }
+            Debug.Log("Command execution resumed.");
         }
     }
 
@@ -92,7 +118,11 @@ public class CommandQueue : MonoBehaviour
             StopCoroutine(executionCoroutine);
             executionCoroutine = null;
         }
+
+        commandQueue.Clear();
         isExecuting = false;
+        isPaused = false;
+        Debug.Log("Command execution stopped and queue cleared.");
     }
 
     /// <summary>
@@ -110,24 +140,36 @@ public class CommandQueue : MonoBehaviour
     { 
         isExecuting = true;
         OnQueueStarted?.Invoke();
+        Debug.Log($"=== Queue Started ({CommandCount} commands) ===");
 
+        int executionIndex = 1;
         while (commandQueue.Count > 0)
         {
-            if (isPaused)
+            while (isPaused)
             {
-                yield return null; // Wait until the next frame and check again
-                continue;
+                yield return null;
             }
 
             ICommand currentCommand = commandQueue.Peek();
+            string commandType = currentCommand.GetType().Name;
+            string commandDesc = currentCommand.GetCommandName();
+            
+            Debug.Log($"[{executionIndex}/{CommandHistoryCount + CommandCount}] {commandType}: {commandDesc}");
             OnCommandStarted?.Invoke(currentCommand);
+            
             yield return StartCoroutine(currentCommand.Execute());
+            
             OnCommandFinished?.Invoke(currentCommand);
-
             commandHistory.Add(currentCommand);
-            DequeueCommand();
-        }
+            commandQueue.Dequeue();
+            
+            executionIndex++;
+        } 
+
+        Debug.Log($"=== Queue Complete ({CommandHistoryCount} commands executed) ===");
+        OnQueueEmpty?.Invoke();
+        isExecuting = false;
+        executionCoroutine = null;
     }
 }
-
 // end of CommandQueue.cs

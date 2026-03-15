@@ -39,6 +39,11 @@ namespace Pioneer.Commands.Concrete
                 yield return null;
             }
         }
+
+        public string GetCommandName()
+        {
+            return $"Move Drone forward by {distance} units at {speed} units/sec";
+        }
     }
 }
 
