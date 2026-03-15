@@ -1,7 +1,6 @@
 // ICommand.cs
 // Written by:      Jake Morgan
-// Last Updated:    6/10/2024
-// ==========================================================================================
+// Last Updated:    15/03/2026
 
 using System.Collections;
 using UnityEngine;
@@ -21,3 +20,5 @@ namespace Pioneer.Commands
         IEnumerator Execute();
     }
 }
+
+// end of ICommand.cs
