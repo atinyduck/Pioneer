@@ -28,7 +28,9 @@ namespace Pioneer.Commands.Concrete
         {
             float duration = Mathf.Abs(angle) / speed;
             Quaternion startRotation = droneTransform.rotation;
-            Quaternion targetRotation = startRotation * Quaternion.Euler(0, angle, 0);
+
+            // Rotate around the z-axis for a 2D plane
+            Quaternion targetRotation = startRotation * Quaternion.Euler(0, 0, angle);
 
             float elapsedTime = 0f;
             while (elapsedTime < duration)

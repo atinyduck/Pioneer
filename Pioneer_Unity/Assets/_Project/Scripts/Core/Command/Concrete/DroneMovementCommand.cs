@@ -29,7 +29,9 @@ namespace Pioneer.Commands.Concrete
 
             float duration = distance / speed;
             Vector3 startPosition = droneTransform.position;
-            Vector3 targetPosition = startPosition + droneTransform.forward * distance;
+
+            // In 2D, transform.up acts as our "forward" direction.
+            Vector3 targetPosition = startPosition + (droneTransform.up * distance);
 
             float elapsedTime = 0f;
             while (elapsedTime < duration)
