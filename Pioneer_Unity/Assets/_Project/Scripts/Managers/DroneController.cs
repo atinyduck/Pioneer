@@ -57,6 +57,15 @@ public class DroneController : MonoBehaviour
             commandQueue.EnqueueCommand(rotateRightCommand);
         }
 
+        // Press 'E' to queue an Interaction
+        if (Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            float interactionDuration = 0.5f; // Wait half a second while interacting
+            float interactRadius = moveDistance * 0.5f; // Reasonable radius based on grid size
+            var interactCommand = new DroneInteractCommand(transform, interactionDuration, interactRadius);
+            commandQueue.EnqueueCommand(interactCommand);
+        }
+
         // Executing the queue
         if (Keyboard.current.spaceKey.wasPressedThisFrame || Keyboard.current.enterKey.wasPressedThisFrame)
         {
