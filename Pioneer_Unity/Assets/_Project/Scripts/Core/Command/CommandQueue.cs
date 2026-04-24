@@ -31,6 +31,9 @@ public class CommandQueue : MonoBehaviour
     public event System.Action OnQueueEmpty;
 
     // --- LIFECYCLE ---
+    void Start() { }
+    
+    void Update() { }
 
     /// <summary>
     /// Starts executing all queued commands sequentially.
@@ -78,7 +81,6 @@ public class CommandQueue : MonoBehaviour
         if (commandQueue.Count > 0)
         {
             commandQueue.Dequeue();
-            Debug.Log($"Command dequeued. Queue size: {commandQueue.Count}");
         }
     }
 

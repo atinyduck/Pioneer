@@ -1,6 +1,6 @@
 // DroneRotationCommand.cs
 // Written by:      Jake Morgan
-// Last Updated:    24/04/2026
+// Last Updated:    15/03/2026
 
 using System.Collections;
 using UnityEngine;
@@ -28,11 +28,7 @@ namespace Pioneer.Commands.Concrete
         {
             float duration = Mathf.Abs(angle) / speed;
             Quaternion startRotation = droneTransform.rotation;
-
-            // Rotate around the Y-axis for 3D bird's-eye view
             Quaternion targetRotation = startRotation * Quaternion.Euler(0, angle, 0);
-
-            Debug.Log($"[Command] Starting Rotation: Turning {angle} degrees. Target Euler: {targetRotation.eulerAngles.y}");
 
             float elapsedTime = 0f;
             while (elapsedTime < duration)
@@ -41,10 +37,6 @@ namespace Pioneer.Commands.Concrete
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
-
-            // Snap to exact rotation
-            droneTransform.rotation = targetRotation;
-            Debug.Log($"[Command] Finished Rotation: Now facing Euler Y: {droneTransform.rotation.eulerAngles.y}");
         }
 
         public string GetCommandName()
