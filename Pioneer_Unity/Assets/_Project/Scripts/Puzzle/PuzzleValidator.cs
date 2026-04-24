@@ -1,36 +1,92 @@
 // PuzzleValidator.cs
 // Written by:      Jake Morgan
-// Last Updated:    21/04/2026
+// Last Updated:    24/04/2026
 
 using UnityEngine;
+using UnityEngine.Events;
+using System.Collections.Generic; // Added for Lists
 
 namespace Pioneer.Puzzle
 {
+    [RequireComponent(typeof(Collider))]
     public class PuzzleValidator : MonoBehaviour
     {
         // --- FIELDS ---
-        [Tooltip("The target position the drone needs to reach.")]
-        [SerializeField] private Transform targetGoal;
+        [Header("Events")]
+        public UnityEvent OnPuzzlePassed;
+        public UnityEvent OnPuzzleFailed;
+
+        [Header("Level Prerequisites")]
+        [Tooltip("List of buttons that MUST be pressed to solve the puzzle.")]
+        [SerializeField] private List<FloorButton> requiredButtons = new List<FloorButton>();
+
+        // Tracks if the drone is currently standing inside the collider
+        private bool isDroneInZone = false;
+
+        // --- LIFECYCLE ---
         
-        [Tooltip("How close the drone needs to be to the center of the goal to win.")]
-        [SerializeField] private float acceptableDistance = 0.1f;
+        // Unity calls this the exact frame something touches the Trigger
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                isDroneInZone = true;
+                Debug.Log("[Validator] Drone entered the Goal Zone.");
+            }
+        }
+
+        // Unity calls this the exact frame something leaves the Trigger
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                isDroneInZone = false;
+                Debug.Log("[Validator] Drone left the Goal Zone.");
+            }
+        }
 
         // --- METHODS ---
+
         /// <summary>
-        /// Checks if the provided drone transform is within the acceptable distance to the goal.
+        /// Call this method when the CommandQueue finishes executing.
+        /// It will check if the drone ended up in the zone AND if the level rules are met.
         /// </summary>
-        public bool IsPuzzleSolved(Transform droneTransform)
+        public void CheckWinCondition()
         {
-            if (targetGoal == null)
+            Debug.Log("[Validator] Checking Win Conditions...");
+
+            bool arePrerequisitesMet = CheckLevelPrerequisites();
+
+            if (isDroneInZone && arePrerequisitesMet)
             {
-                Debug.LogError("No Target Goal set in PuzzleValidator!");
-                return false;
+                Debug.Log("[Validator] SUCCESS! Drone is in the zone and all prerequisites met.");
+                OnPuzzlePassed?.Invoke();
+            }
+            else
+            {
+                Debug.Log($"[Validator] FAILED! In Zone: {isDroneInZone} | Prereqs Met: {arePrerequisitesMet}");
+                OnPuzzleFailed?.Invoke();
+            }
+        }
+
+        /// <summary>
+        /// Checks if all required buttons in the list are currently pressed down.
+        /// </summary>
+        private bool CheckLevelPrerequisites()
+        {
+            // Loop through all required buttons
+            foreach (FloorButton button in requiredButtons)
+            {
+                // If even one button is not pressed, prerequisites fail!
+                if (!button.IsPressed)
+                {
+                    Debug.Log($"[Validator] Prerequisite Failed: '{button.gameObject.name}' is not pressed.");
+                    return false; 
+                }
             }
 
-            if (droneTransform == null) return false;
-
-            float distance = Vector3.Distance(droneTransform.position, targetGoal.position);
-            return distance <= acceptableDistance;
+            Debug.Log("[Validator] All button prerequisites are met.");
+            return true; // We made it through the loop, so all buttons are pressed!
         }
     }
 }
