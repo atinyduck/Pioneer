@@ -1,0 +1,14 @@
+Welcome to World One: Booleans & Loops!
+
+Level 1:
+
+To open the door and reach the goal, you must....
+
+
+
+Available Commands:
+
+move() - move 1 number of spaces.
+turn - turn x degrees (can be negative!).
+pickup() - pickup the box in front of your drone.
+drop() - drop the box in the square in front of you.

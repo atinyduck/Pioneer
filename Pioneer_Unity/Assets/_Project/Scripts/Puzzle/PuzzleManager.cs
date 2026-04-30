@@ -34,6 +34,21 @@ namespace Pioneer.Puzzle
                 initialDronePosition = droneTransform.position;
                 initialDroneRotation = droneTransform.rotation;
             }
+            else
+            {
+                // Attempt to auto-find the drone if not assigned
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                if (player != null)
+                {
+                    droneTransform = player.transform;
+                    initialDronePosition = droneTransform.position;
+                    initialDroneRotation = droneTransform.rotation;
+                }
+                else
+                {
+                    Debug.LogWarning("[PuzzleManager] Drone transform not assigned and no object tagged 'Player' was found.");
+                }
+            }
 
             // 2. Subscribe to the Queue's finish event
             if (commandQueue != null)
