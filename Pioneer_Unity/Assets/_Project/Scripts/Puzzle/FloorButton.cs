@@ -17,10 +17,6 @@ namespace Pioneer.Puzzle
         public UnityEvent OnPressed;
         public UnityEvent OnReleased;
 
-        // Let other scripts easily know when state shifts (useful for Logic Gates)
-        public delegate void ButtonStateChange(bool isPressed);
-        public event ButtonStateChange OnButtonStateChanged;
-
         private int objectsOnButton = 0;
 
         // --- LIFECYCLE ---
@@ -34,7 +30,6 @@ namespace Pioneer.Puzzle
                 {
                     IsPressed = true;
                     OnPressed?.Invoke(); 
-                    OnButtonStateChanged?.Invoke(IsPressed);
                     Debug.Log($"Button {gameObject.name} Pressed!");
                 }
             }
@@ -50,7 +45,6 @@ namespace Pioneer.Puzzle
                     objectsOnButton = 0;
                     IsPressed = false;
                     OnReleased?.Invoke();
-                    OnButtonStateChanged?.Invoke(IsPressed);
                     Debug.Log($"Button {gameObject.name} Released!");
                 }
             }

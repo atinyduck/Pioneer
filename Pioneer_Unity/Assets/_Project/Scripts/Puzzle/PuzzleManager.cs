@@ -1,34 +1,44 @@
 // PuzzleManager.cs
 // Written by:      Jake Morgan
-// Last Updated:    21/04/2026
+// Last Updated:    24/04/2026
 
 using UnityEngine;
+using Pioneer.Commands;
+using Pioneer.UI;
+using System.Collections.Generic;
 
 namespace Pioneer.Puzzle
 {
-    [RequireComponent(typeof(PuzzleValidator))]
     public class PuzzleManager : MonoBehaviour
     {
-        // --- FIELDS ---
-        [Header("Scene References")]
-        [SerializeField] private Transform droneTransform;
-        [SerializeField] private CommandQueue commandQueue;
+        // --- STATE STRUCTS ---
+        private struct BoxState
+        {
+            public PickableBox box;
+            public Vector3 startPosition;
+            public Quaternion startRotation;
+            public Transform startParent;
+            public bool startIsHeld;
+        }
 
-        private PuzzleValidator validator;
+        // --- FIELDS ---
+        [Header("System References")]
+        [SerializeField] private CommandQueue commandQueue;
+        [SerializeField] private PuzzleValidator currentValidator;
+        [SerializeField] private FeedbackManager feedbackManager;
+
+        [Header("State Tracking")]
+        [SerializeField] private Transform droneTransform;
         
         // State tracking for resets
         private Vector3 initialDronePosition;
         private Quaternion initialDroneRotation;
+        private List<BoxState> initialBoxStates = new List<BoxState>();
 
         // --- LIFECYCLE ---
-        private void Awake()
-        {
-            validator = GetComponent<PuzzleValidator>();
-        }
-
         private void Start()
         {
-            // 1. Record starting position/rotation for clean resets
+            // 1. Record starting state of the Drone
             if (droneTransform != null)
             {
                 initialDronePosition = droneTransform.position;
@@ -50,49 +60,102 @@ namespace Pioneer.Puzzle
                 }
             }
 
-            // 2. Subscribe to the Queue's finish event
+            // 2. Record starting state of all Pickable Boxes in the scene
+            PickableBox[] allBoxes = FindObjectsByType<PickableBox>(FindObjectsSortMode.None);
+            foreach (PickableBox b in allBoxes)
+            {
+                initialBoxStates.Add(new BoxState
+                {
+                    box = b,
+                    startPosition = b.transform.position,
+                    startRotation = b.transform.rotation,
+                    startParent = b.transform.parent,
+                    startIsHeld = b.IsHeld
+                });
+            }
+
+            // 3. Subscribe to the Queue's finish event
             if (commandQueue != null)
             {
                 commandQueue.OnQueueEmpty += HandleQueueFinished;
+            }
+
+            // 4. Subscribe to the Validator's win/loss events
+            if (currentValidator != null)
+            {
+                currentValidator.OnPuzzlePassed.AddListener(HandlePuzzlePassed);
+                currentValidator.OnPuzzleFailed.AddListener(HandlePuzzleFailed);
             }
         }
 
         private void OnDestroy()
         {
+            // Clean up event subscriptions
             if (commandQueue != null)
             {
                 commandQueue.OnQueueEmpty -= HandleQueueFinished;
+            }
+            if (currentValidator != null)
+            {
+                currentValidator.OnPuzzlePassed.RemoveListener(HandlePuzzlePassed);
+                currentValidator.OnPuzzleFailed.RemoveListener(HandlePuzzleFailed);
             }
         }
 
         // --- METHODS ---
         private void HandleQueueFinished()
         {
-            // 3. When the queue finishes, validate the puzzle
-            if (validator.IsPuzzleSolved(droneTransform))
+            Debug.Log("[PuzzleManager] Queue empty. Asking Validator to check state...");
+            if (currentValidator != null)
             {
-                Debug.Log("PUZZLE SOLVED! The drone reached the target.");
-                // TODO: Trigger UI FeedbackSystem success modal
+                currentValidator.CheckWinCondition(); 
             }
-            else
+            else 
             {
-                Debug.Log("PUZZLE FAILED! The drone is not at the target.");
-                // TODO: Trigger UI FeedbackSystem hint modal
+                Debug.LogWarning("[PuzzleManager] No PuzzleValidator assigned! Cannot check win condition.");
             }
+        }
+
+        private void HandlePuzzlePassed()
+        {
+            Debug.Log("[PuzzleManager] Notification received: Puzzle Passed! Loading UI...");
+            if (feedbackManager != null) feedbackManager.ShowSuccess();
+        }
+
+        private void HandlePuzzleFailed()
+        {
+            Debug.Log("[PuzzleManager] Notification received: Puzzle Failed! Suggesting Reset...");
+            if (feedbackManager != null) feedbackManager.ShowFailure();
         }
 
         public void ResetPuzzle()
         {
-            if (droneTransform == null) return;
+            // Stop execution
+            if (commandQueue != null) commandQueue.Stop();
 
-            // Stop any running commands immediately
-            commandQueue.Stop();
-
-            // Snap back to exactly where the drone started
-            droneTransform.position = initialDronePosition;
-            droneTransform.rotation = initialDroneRotation;
+            // Reset drone
+            if (droneTransform != null)
+            {
+                droneTransform.position = initialDronePosition;
+                droneTransform.rotation = initialDroneRotation;
+            }
             
-            Debug.Log("Puzzle Reset. Drone back to start.");
+            // Loop through and reset all PickableBoxes
+            foreach (BoxState state in initialBoxStates)
+            {
+                if (state.box != null)
+                {
+                    state.box.transform.SetParent(state.startParent);
+                    state.box.transform.position = state.startPosition;
+                    state.box.transform.rotation = state.startRotation;
+                    state.box.IsHeld = state.startIsHeld;   
+                }
+            }
+            
+            // Hide UI
+            if (feedbackManager != null) feedbackManager.HideAll();
+            
+            Debug.Log("[PuzzleManager] Level reset to initial state.");
         }
     }
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &855450752676768129
+--- !u!1 &2591400228681114107
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7182316383199620728}
-  - component: {fileID: -3190371870797399848}
-  - component: {fileID: 4373395540496216833}
-  - component: {fileID: 2262531549117873592}
-  - component: {fileID: 6401824975358696361}
-  - component: {fileID: 4860244520493806256}
+  - component: {fileID: 2701125702921003396}
+  - component: {fileID: 593830299734906170}
+  - component: {fileID: 8315895224323598750}
+  - component: {fileID: 1706840009820682821}
+  - component: {fileID: 6840592400615699539}
+  - component: {fileID: 2652141188058591557}
   m_Layer: 0
-  m_Name: FloorButton
-  m_TagString: Untagged
+  m_Name: PickableBox
+  m_TagString: PickableBox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7182316383199620728
+--- !u!4 &2701125702921003396
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 855450752676768129}
+  m_GameObject: {fileID: 2591400228681114107}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.56466, y: 0.17227, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.1, z: 0.8}
+  m_LocalPosition: {x: -1.81077, y: -0, z: -2.58279}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &-3190371870797399848
+--- !u!54 &593830299734906170
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 855450752676768129}
+  m_GameObject: {fileID: 2591400228681114107}
   serializedVersion: 5
   m_Mass: 1
   m_LinearDamping: 0
@@ -63,13 +63,13 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &4373395540496216833
+--- !u!65 &8315895224323598750
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 855450752676768129}
+  m_GameObject: {fileID: 2591400228681114107}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -78,27 +78,27 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 6, z: 1}
-  m_Center: {x: 0, y: 2, z: 0}
---- !u!33 &2262531549117873592
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &1706840009820682821
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 855450752676768129}
+  m_GameObject: {fileID: 2591400228681114107}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &6401824975358696361
+--- !u!23 &6840592400615699539
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 855450752676768129}
+  m_GameObject: {fileID: 2591400228681114107}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -141,21 +141,15 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4860244520493806256
+--- !u!114 &2652141188058591557
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 855450752676768129}
+  m_GameObject: {fileID: 2591400228681114107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b3b8fa385f72f1438c312da3515de8a, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d73e9ed2b19919438a1865f1c87c134, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Pioneer.Puzzle.FloorButton
-  OnPressed:
-    m_PersistentCalls:
-      m_Calls: []
-  OnReleased:
-    m_PersistentCalls:
-      m_Calls: []
+  m_EditorClassIdentifier: Assembly-CSharp::Pioneer.Puzzle.PickableBox

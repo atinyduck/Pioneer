@@ -3,7 +3,6 @@
 // Last Updated:    24/04/2026
 
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Pioneer.Puzzle;
 
 namespace Pioneer.UI
@@ -81,26 +80,11 @@ namespace Pioneer.UI
             if (puzzleManager != null)
             {
                 puzzleManager.ResetPuzzle();
-                HideAll(); // Ensure we hide everything when restarting
+                // The puzzle manager will automatically call HideAll() on this script
             }
             else
             {
                 Debug.LogWarning("[FeedbackManager] PuzzleManager reference missing! Cannot restart.");
-            }
-        }
-
-        /// <summary>
-        /// Hook this method up to the OnClick event of the Next Level UI Button
-        /// </summary>
-        public void OnNextLevelClicked(string nextSceneName)
-        {
-            if (!string.IsNullOrEmpty(nextSceneName))
-            {
-                SceneManager.LoadScene(nextSceneName);
-            }
-            else
-            {
-                Debug.LogWarning("[FeedbackManager] Next scene name was not provided.");
             }
         }
     }
