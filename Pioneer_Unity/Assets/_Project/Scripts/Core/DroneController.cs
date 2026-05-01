@@ -100,7 +100,7 @@ public class DroneController : MonoBehaviour
         if (Keyboard.current.rKey.wasPressedThisFrame)
         {
             Debug.Log("[Input] R Pressed -> Requesting Level Reset from PuzzleManager");
-            var puzzleManager = FindFirstObjectByType<Pioneer.Puzzle.PuzzleManager>();
+            var puzzleManager = FindFirstObjectByType<PuzzleManager>();
             if (puzzleManager != null)
             {
                 puzzleManager.ResetPuzzle();

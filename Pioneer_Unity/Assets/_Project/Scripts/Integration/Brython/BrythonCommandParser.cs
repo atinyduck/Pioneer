@@ -36,7 +36,7 @@ namespace Pioneer.Integration.Brython
                     Debug.LogError($"Python Execution Error: {response.error}");
 
                     // Try to find the CodeEditor UI to display the error to the player
-                    UI.CodeEditorUI editorUI = FindObjectOfType<UI.CodeEditorUI>();
+                    UI.CodeEditorUI editorUI = FindFirstObjectByType<UI.CodeEditorUI>();
                     if (editorUI != null)
                     {
                         editorUI.UpdateStatus($"<color=red>Syntax Error: {response.error}</color>");
@@ -77,9 +77,15 @@ namespace Pioneer.Integration.Brython
                             break;
 
                         case "interact":
-                        case "pickup":
-                        case "drop":
                             droneCommand = new DroneInteractCommand(droneTransform, droneCarryPoint);
+                            break;
+
+                        case "pickup":
+                            droneCommand = new DroneInteractCommand(droneTransform, droneCarryPoint, DroneInteractCommand.InteractionMode.Pickup);
+                            break;
+
+                        case "drop":
+                            droneCommand = new DroneInteractCommand(droneTransform, droneCarryPoint, DroneInteractCommand.InteractionMode.Drop);
                             break;
 
                         default:

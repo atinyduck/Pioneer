@@ -27,21 +27,21 @@ def process_player_code(raw_code):
         # We need a safe local dictionary to trap the player's variables
         safe_locals = {}
 
-        # 1. We create a mock 'API' that the user code can call
-        # Every time they call move(), turn(), it adds to a python list.
+        # 1. We create a mock 'API' that the user code can call.
+        # Every time they call move(), turn(), pickup(), or drop(), it adds to a python list.
         command_list = []
 
-        def move():
-            command_list.append({"action": "move", "value": 1})
+        def move(steps=1):
+          command_list.append({"action": "move", "value": steps})
 
         def turn(x):
             command_list.append({"action": "turn", "value": x})
 
         def pickup():
-            command_list.append({"action": "interact", "value": 0})
+          command_list.append({"action": "pickup", "value": 0})
 
         def drop():
-            command_list.append({"action": "interact", "value": 0})
+          command_list.append({"action": "drop", "value": 0})
 
         # Inject these functions into the local scope so the player can use them
         safe_locals['move'] = move

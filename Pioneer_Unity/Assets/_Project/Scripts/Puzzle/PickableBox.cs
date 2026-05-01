@@ -4,11 +4,8 @@
 
 using UnityEngine;
 
-namespace Pioneer.Puzzle
+// Identifies an object that can be picked up and droped by the drone
+public class PickableBox : MonoBehaviour
 {
-    // Identifies an object that can be picked up and droped by the drone
-    public class PickableBox : MonoBehaviour
-    {
-        public bool IsHeld { get; set; } = false;
-    }
+    public bool IsHeld { get; set; } = false;
 }

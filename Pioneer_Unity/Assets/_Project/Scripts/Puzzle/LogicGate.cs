@@ -2,20 +2,18 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-namespace Pioneer.Puzzle
+public enum LogicGateType
 {
-    public enum LogicGateType
-    {
-        AND,
-        OR,
-        NOT // Note: NOT gate typically uses only one input (the first in the list)
-    }
+    AND,
+    OR,
+    NOT // Note: NOT gate typically uses only one input (the first in the list)
+}
 
-    /// <summary>
-    /// Evaluates the state of multiple FloorButtons based on a Logic Gate type (AND, OR, NOT).
-    /// Fires UnityEvents when the evaluated state changes.
-    /// </summary>
-    public class LogicGate : MonoBehaviour
+/// <summary>
+/// Evaluates the state of multiple FloorButtons based on a Logic Gate type (AND, OR, NOT).
+/// Fires UnityEvents when the evaluated state changes.
+/// </summary>
+public class LogicGate : MonoBehaviour
     {
         [Header("Gate Settings")]
         [Tooltip("The type of logic gate (AND, OR, NOT)")]
@@ -36,12 +34,13 @@ namespace Pioneer.Puzzle
 
         private void OnEnable()
         {
-            // Subscribe to each floor button's state change event
+            // Subscribe to each floor button's pressed and released events
             foreach (var button in inputs)
             {
                 if (button != null)
                 {
-                    button.OnButtonStateChanged += EvaluateGate;
+                    button.OnPressed.AddListener(() => EvaluateGate(false));
+                    button.OnReleased.AddListener(() => EvaluateGate(false));
                 }
             }
         }
@@ -53,7 +52,8 @@ namespace Pioneer.Puzzle
             {
                 if (button != null)
                 {
-                    button.OnButtonStateChanged -= EvaluateGate;
+                    button.OnPressed.RemoveAllListeners();
+                    button.OnReleased.RemoveAllListeners();
                 }
             }
         }
@@ -121,4 +121,3 @@ namespace Pioneer.Puzzle
             }
         }
     }
-}

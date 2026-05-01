@@ -165,7 +165,9 @@ public class CommandQueue : MonoBehaviour
         } 
 
         Debug.Log($"=== Queue Complete ({CommandHistoryCount} commands executed) ===");
+        Debug.Log($"[CommandQueue] Invoking OnQueueEmpty event...");
         OnQueueEmpty?.Invoke();
+        Debug.Log($"[CommandQueue] OnQueueEmpty event invoked. Listeners count: {OnQueueEmpty?.GetInvocationList().Length ?? 0}");
         isExecuting = false;
         executionCoroutine = null;
     }

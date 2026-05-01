@@ -1,13 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Pioneer_Unity/Assets/_Project/Prefabs/Interactables/Interactable.prefab.meta
-<<<<<<<< Updated upstream:Pioneer_Unity/Assets/_Project/Prefabs/Interactables/Interactable.prefab.meta
-guid: bb5a735967ab021c090782d9723fcc23
-========
-guid: 00454e45c79cb9b4893a4a404e453499
->>>>>>>> Stashed changes:Pioneer_Unity/Assets/_Project/Prefabs/Puzzles/Door.prefab.meta
-========
-guid: 9b134b42c1b5c2545838c75abc168222
->>>>>>>> feat/stage1-core-loop:Pioneer_Unity/Assets/_Project/Prefabs/Interactables/FloorButton.prefab.meta
+guid: 855f6e2a7c8c31a438acc88b7f7e0bb5
 PrefabImporter:
   externalObjects: {}
   userData: 

@@ -20,19 +20,42 @@ namespace Pioneer.Commands.Concrete
         {
             this.droneTransform = droneTransform;
             this.distance = distance;
-            this.speed = speed <= 0f ? speed : 1.0f; // Ensure speed is not zero to avoid division by zero
+            this.speed = speed <= 0f ? 1.0f : speed; // Ensure speed is not zero to avoid division by zero
         }
 
         // --- METHODS ---
         public IEnumerator Execute()
         {
-
             float duration = distance / speed;
             Vector3 startPosition = droneTransform.position;
             // Target position based on local forward (Z-axis in 3D)
             Vector3 targetPosition = startPosition + (droneTransform.forward * distance);
 
             Debug.Log($"[Command] Starting Movement: Moving from {startPosition} to {targetPosition}");
+
+            // Check for blocking colliders before translating the drone manually.
+            Vector3 rayOrigin = startPosition + (droneTransform.forward * 0.1f);
+            if (Physics.Raycast(rayOrigin, droneTransform.forward, out RaycastHit hit, distance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+            {
+                if (!hit.collider.transform.IsChildOf(droneTransform))
+                {
+                    Debug.LogWarning($"[Command] Movement blocked by {hit.collider.name}. Cannot move to {targetPosition}");
+
+                    FeedbackManager feedbackManager = Object.FindFirstObjectByType<FeedbackManager>();
+                    if (feedbackManager != null)
+                    {
+                        feedbackManager.ShowFailure();
+                    }
+
+                    CommandQueue queue = Object.FindFirstObjectByType<CommandQueue>();
+                    if (queue != null)
+                    {
+                        queue.Stop();
+                    }
+
+                    yield break;
+                }
+            }
 
             float elapsedTime = 0f;
             while (elapsedTime < duration)

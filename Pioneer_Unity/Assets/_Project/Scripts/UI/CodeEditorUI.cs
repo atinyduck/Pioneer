@@ -39,7 +39,7 @@ namespace Pioneer.UI
                 }
                 else if (string.IsNullOrEmpty(codeInputField.text))
                 {
-                    codeInputField.text = "# Type your Python code here!\n# Example:\n# move()\n# turn()";
+                    codeInputField.text = "# Type your Python code here!\n# Example:\n# move()\n# turn(90)\n# pickup()\n# drop()";
                 }
 
                 // Unity natively does not allow modifying the Tab Size dynamically inside the InputField component natively.

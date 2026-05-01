@@ -45,40 +45,80 @@ namespace Pioneer.Integration.Brython
 
         private void MockExecutionForEditor(string code)
         {
-            // A slightly more robust mock parser so we can test sequences of commands in the Editor
+            // Editor fallback: parse direct function calls so the Python API can be tested without WebGL.
             System.Text.StringBuilder jsonBuilder = new System.Text.StringBuilder();
-            jsonBuilder.Append("{\"commands\": [");
+            jsonBuilder.Append("{\"commands\":[");
 
             string[] lines = code.Split(new[] { '\n', '\r' }, System.StringSplitOptions.RemoveEmptyEntries);
             bool isFirst = true;
 
-            foreach (string line in lines)
+            foreach (string rawLine in lines)
             {
-                string cleanLine = line.Trim().ToLower();
+                string cleanLine = rawLine.Trim().ToLower();
 
-                if (cleanLine.StartsWith("move"))
+                if (string.IsNullOrWhiteSpace(cleanLine) || cleanLine.StartsWith("#"))
                 {
-                    if (!isFirst) jsonBuilder.Append(",");
-                    jsonBuilder.Append("{\"action\": \"move\", \"value\": 1}");
-                    isFirst = false;
+                    continue;
                 }
-                else if (cleanLine.StartsWith("turn"))
+
+                string action = null;
+                float value = 0f;
+
+                if (cleanLine.StartsWith("move("))
                 {
-                    if (!isFirst) jsonBuilder.Append(",");
-                    jsonBuilder.Append("{\"action\": \"turn\", \"value\": 90}");
-                    isFirst = false;
+                    action = "move";
+                    value = ExtractFloatArgument(cleanLine, 1f);
                 }
-                else if (cleanLine.StartsWith("pickup") || cleanLine.StartsWith("drop"))
+                else if (cleanLine.StartsWith("turn("))
                 {
-                    if (!isFirst) jsonBuilder.Append(",");
-                    jsonBuilder.Append("{\"action\": \"interact\", \"value\": 0}");
-                    isFirst = false;
+                    action = "turn";
+                    value = ExtractFloatArgument(cleanLine, 90f);
                 }
+                else if (cleanLine.StartsWith("pickup("))
+                {
+                    action = "pickup";
+                }
+                else if (cleanLine.StartsWith("drop("))
+                {
+                    action = "drop";
+                }
+
+                if (action == null)
+                {
+                    continue;
+                }
+
+                if (!isFirst)
+                {
+                    jsonBuilder.Append(",");
+                }
+
+                jsonBuilder.Append("{\"action\":\"").Append(action).Append("\",\"value\":").Append(value.ToString(System.Globalization.CultureInfo.InvariantCulture)).Append("}");
+                isFirst = false;
             }
 
             jsonBuilder.Append("]}");
 
             parser.ParseAndEnqueueCommands(jsonBuilder.ToString());
+        }
+
+        private static float ExtractFloatArgument(string line, float fallback)
+        {
+            int openParenIndex = line.IndexOf('(');
+            int closeParenIndex = line.IndexOf(')', openParenIndex + 1);
+
+            if (openParenIndex < 0 || closeParenIndex <= openParenIndex + 1)
+            {
+                return fallback;
+            }
+
+            string argumentText = line.Substring(openParenIndex + 1, closeParenIndex - openParenIndex - 1).Trim();
+            if (float.TryParse(argumentText, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float parsedValue))
+            {
+                return parsedValue;
+            }
+
+            return fallback;
         }
     }
 }

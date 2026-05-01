@@ -6,10 +6,8 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic; // Added for Lists
 
-namespace Pioneer.Puzzle
-{
-    [RequireComponent(typeof(Collider))]
-    public class PuzzleValidator : MonoBehaviour
+[RequireComponent(typeof(Collider))]
+public class PuzzleValidator : MonoBehaviour
     {
         // --- FIELDS ---
         [Header("Events")]
@@ -54,17 +52,19 @@ namespace Pioneer.Puzzle
         public void CheckWinCondition()
         {
             Debug.Log("[Validator] Checking Win Conditions...");
+            Debug.Log($"[Validator] isDroneInZone = {isDroneInZone}");
 
             bool arePrerequisitesMet = CheckLevelPrerequisites();
+            Debug.Log($"[Validator] arePrerequisitesMet = {arePrerequisitesMet}");
 
             if (isDroneInZone && arePrerequisitesMet)
             {
-                Debug.Log("[Validator] SUCCESS! Drone is in the zone and all prerequisites met.");
+                Debug.Log("[Validator] ✅ SUCCESS! Drone is in the zone and all prerequisites met.");
                 OnPuzzlePassed?.Invoke();
             }
             else
             {
-                Debug.Log($"[Validator] FAILED! In Zone: {isDroneInZone} | Prereqs Met: {arePrerequisitesMet}");
+                Debug.Log($"[Validator] ❌ FAILED! In Zone: {isDroneInZone} | Prereqs Met: {arePrerequisitesMet}");
                 OnPuzzleFailed?.Invoke();
             }
         }
@@ -74,6 +74,12 @@ namespace Pioneer.Puzzle
         /// </summary>
         private bool CheckLevelPrerequisites()
         {
+            if (requiredButtons.Count == 0)
+            {
+                Debug.Log("[Validator] No required buttons - prerequisites automatically met!");
+                return true;
+            }
+            
             // Loop through all required buttons
             foreach (FloorButton button in requiredButtons)
             {
@@ -89,4 +95,3 @@ namespace Pioneer.Puzzle
             return true; // We made it through the loop, so all buttons are pressed!
         }
     }
-}
