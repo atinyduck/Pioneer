@@ -1,14 +1,15 @@
-Welcome to World One: Booleans & Loops!
+World 1: Level 2
 
-Level 2:
+Welcome back.
+This level is still part of World 1, but it builds on what you learned in the first tutorial.
+Now the path is a little longer, so this is a good place to start using a for loop in Python.
+Instead of typing the same command many times, try repeating movement in a pattern to guide the drone through the maze.
+The goal is still the green square, but this time the puzzle is designed to encourage cleaner, repeated logic.
 
-To open the door and reach the goal, you must....
+Try using a for loop to repeat move() commands and see how it helps you solve the level more efficiently.
 
-
-
-Available Commands:
-
-move() - move 1 number of spaces.
-turn(x) - turn x degrees (can be negative!).
-pickup() - pickup the box in front of your drone.
-drop() - drop the box in the square in front of you.
+Available Commands
+move() - move the drone forward by 1 space.
+turn(x) - turn the drone by x degrees.
+pickup() - pick up the box in front of the drone.
+drop() - drop the box in the square in front of the drone.

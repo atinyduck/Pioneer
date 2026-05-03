@@ -29,6 +29,10 @@ public class DroneController : MonoBehaviour
     [Tooltip("How far forward the drone can reach to grab a box")]
     [SerializeField] private float interactDistance = 1.25f;
 
+    [Header("Debug Input")]
+    [Tooltip("When false, gameplay key input is ignored. Toggle with the backquote key (`).")]
+    [SerializeField] private bool gameplayInputEnabled = false;
+
     private CommandQueue commandQueue;
 
     // --- LIFECYCLE ---
@@ -42,6 +46,22 @@ public class DroneController : MonoBehaviour
     private void Update()
     {
         if (Keyboard.current == null) return;
+
+        if (Keyboard.current.backquoteKey.wasPressedThisFrame)
+        {
+            gameplayInputEnabled = !gameplayInputEnabled;
+            Debug.Log($"[Input] Gameplay input {(gameplayInputEnabled ? "enabled" : "disabled")} via backquote toggle.");
+        }
+
+        if (!gameplayInputEnabled)
+        {
+            return;
+        }
+
+        if (commandQueue != null && commandQueue.IsExecuting)
+        {
+            return;
+        }
 
         // Press 'W' to queue Forward movement
         if (Keyboard.current.wKey.wasPressedThisFrame)
@@ -104,6 +124,21 @@ public class DroneController : MonoBehaviour
             if (puzzleManager != null)
             {
                 puzzleManager.ResetPuzzle();
+            }
+        }
+
+        // Press CTRL+Shift+L to Skip to Next Level
+        if (Keyboard.current.ctrlKey.isPressed && Keyboard.current.shiftKey.isPressed && Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            Debug.Log("[Cheat] CTRL+Shift+L Pressed -> Skipping to Next Level");
+            var puzzleManager = FindFirstObjectByType<PuzzleManager>();
+            if (puzzleManager != null)
+            {
+                puzzleManager.LoadNextLevel();
+            }
+            else
+            {
+                Debug.LogError("[Cheat] Could not skip level - PuzzleManager not found in scene");
             }
         }
     }

@@ -35,9 +35,9 @@ namespace Pioneer.Commands.Concrete
 
             // Check for blocking colliders before translating the drone manually.
             Vector3 rayOrigin = startPosition + (droneTransform.forward * 0.1f);
-            if (Physics.Raycast(rayOrigin, droneTransform.forward, out RaycastHit hit, distance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(rayOrigin, droneTransform.forward, out RaycastHit hit, distance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Collide))
             {
-                if (!hit.collider.transform.IsChildOf(droneTransform))
+                if (IsBlockingHit(hit.collider))
                 {
                     Debug.LogWarning($"[Command] Movement blocked by {hit.collider.name}. Cannot move to {targetPosition}");
 
@@ -68,6 +68,31 @@ namespace Pioneer.Commands.Concrete
             // Snap to exact target to prevent floating point errors over time
             droneTransform.position = targetPosition; 
             Debug.Log($"[Command] Finished Movement: Arrived at {droneTransform.position}");
+        }
+
+        private bool IsBlockingHit(Collider hitCollider)
+        {
+            if (hitCollider == null)
+            {
+                return false;
+            }
+
+            if (hitCollider.transform.IsChildOf(droneTransform))
+            {
+                return false;
+            }
+
+            if (hitCollider.GetComponentInParent<WallCollider>() != null)
+            {
+                return true;
+            }
+
+            if (hitCollider.GetComponentInParent<Door>() != null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public string GetCommandName()

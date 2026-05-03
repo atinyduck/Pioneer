@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Runtime.InteropServices;
 
+
 namespace Pioneer.Integration.Brython
 {
     public class BrythonRunner : MonoBehaviour
@@ -15,23 +16,6 @@ namespace Pioneer.Integration.Brython
         /// </summary>
         public void ExecutePython(string pythonCode)
         {
-            // Secret debugging command to skip to the next level
-            if (pythonCode.Trim().ToLower() == "skip()")
-            {
-                Debug.Log("[Cheat] Skipping to Next Level...");
-                int currentBuildIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
-                int totalScenes = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
-                if (currentBuildIndex + 1 < totalScenes)
-                {
-                    UnityEngine.SceneManagement.SceneManager.LoadScene(currentBuildIndex + 1);
-                }
-                else
-                {
-                    Debug.LogWarning("Already on the last level!");
-                }
-                return; // Return early, don't execute script
-            }
-
             // If in the Unity Editor, WebGL Plugins don't work. We need a fallback or clear warning.
             #if UNITY_EDITOR
                 Debug.LogWarning("Brython evaluation only works in the compiled WebGL build. Mocking response for testing.");

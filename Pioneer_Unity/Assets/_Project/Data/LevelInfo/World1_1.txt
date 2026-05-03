@@ -1,14 +1,15 @@
-Welcome to World One: Booleans & Loops!
+World 1: First Steps
 
-Level 1:
+Welcome to the tutorial.
+This level is here to teach you the basics of Python and movement in the game.
+Use your code to guide the drone from the start to the green goal.
+You can choose either route from the corner, so there is no single exact solution.
+Take your time and focus on learning how the drone moves when your code runs.
 
-To open the door and reach the goal, you must....
+This is a tutorial level, so try simple movement commands and watch what happens.
 
-
-
-Available Commands:
-
-move() - move 1 number of spaces.
-turn(x) - turn x degrees (can be negative!).
-pickup() - pickup the box in front of your drone.
-drop() - drop the box in the square in front of you.
+Available Commands
+move() - move the drone forward by 1 space.
+turn(x) - turn the drone by x degrees.
+pickup() - pick up the box in front of the drone.
+drop() - drop the box in the square in front of the drone.

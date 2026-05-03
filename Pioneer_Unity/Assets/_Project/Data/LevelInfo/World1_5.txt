@@ -1,0 +1,26 @@
+World 1: Level 5
+
+This level introduces temporary holding and OR logic.
+
+In this puzzle, the final door is controlled by an OR gate.
+An OR gate returns true when at least one input is true.
+
+Truth Table for OR
+A     | B     | Output
+False | False | True
+False | True  | True
+True  | False | True
+True  | True  | False
+
+Think of the buttons as inputs and the final door as the output.
+Plan a sequence that lets you place a box to hold the first button, press the final button, then remove a box so the door opens.
+
+This is an OR gate puzzle with a temporary hold. At least one input must be true for the door to open; you must use the box as a temporary holder, press the final button, then remove the box to complete the level.
+
+Available Commands
+
+move() - move the drone forward by 1 space.
+turn(x) - turn the drone by x degrees.
+pickup() - pick up the box in front of the drone.
+drop() - drop the box in the square in front of the drone.
+repeat(n) / loops (if supported)

@@ -17,6 +17,8 @@ public class PuzzleManager : MonoBehaviour
         public Quaternion startRotation;
         public Transform startParent;
         public bool startIsHeld;
+        public bool startIsKinematic;
+        public bool startDetectCollisions;
     }
 
     // --- FIELDS ---
@@ -65,13 +67,16 @@ public class PuzzleManager : MonoBehaviour
         PickableBox[] allBoxes = FindObjectsByType<PickableBox>(FindObjectsSortMode.None);
         foreach (PickableBox b in allBoxes)
         {
+            Rigidbody boxRb = b.GetComponent<Rigidbody>();
             initialBoxStates.Add(new BoxState
             {
                 box = b,
                 startPosition = b.transform.position,
                 startRotation = b.transform.rotation,
                 startParent = b.transform.parent,
-                startIsHeld = b.IsHeld
+                startIsHeld = b.IsHeld,
+                startIsKinematic = boxRb != null && boxRb.isKinematic,
+                startDetectCollisions = boxRb != null && boxRb.detectCollisions
             });
         }
 
@@ -175,6 +180,13 @@ public class PuzzleManager : MonoBehaviour
                 state.box.transform.position = state.startPosition;
                 state.box.transform.rotation = state.startRotation;
                 state.box.IsHeld = state.startIsHeld;
+
+                Rigidbody boxRb = state.box.GetComponent<Rigidbody>();
+                if (boxRb != null)
+                {
+                    boxRb.isKinematic = state.startIsKinematic;
+                    boxRb.detectCollisions = state.startDetectCollisions;
+                }
             }
         }
 
@@ -189,9 +201,14 @@ public class PuzzleManager : MonoBehaviour
         int currentBuildIndex = SceneManager.GetActiveScene().buildIndex;
         int totalScenes = SceneManager.sceneCountInBuildSettings;
 
+        Debug.Log($"[PuzzleManager.LoadNextLevel] Current scene index: {currentBuildIndex}, Total scenes: {totalScenes}");
+
         if (currentBuildIndex + 1 < totalScenes)
         {
-            SceneManager.LoadScene(currentBuildIndex + 1);
+            int nextSceneIndex = currentBuildIndex + 1;
+            string nextSceneName = SceneManager.GetSceneByBuildIndex(nextSceneIndex).name;
+            Debug.Log($"[PuzzleManager.LoadNextLevel] Loading scene {nextSceneIndex} ({nextSceneName})...");
+            SceneManager.LoadScene(nextSceneIndex);
         }
         else
         {

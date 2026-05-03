@@ -1,14 +1,16 @@
-Welcome to World One: Booleans & Loops!
+World 1: Level 3
 
-Level 3:
+Welcome to the next tutorial level.
+This time you will learn how to use boxes and buttons to open doors.
+Your goal is to move the box onto the button so the door opens, then guide the drone safely to the green goal.
 
-To open the door and reach the goal, you must....
+This puzzle is still about learning, so take your time and watch how the box changes the level when it is placed correctly.
+You may need to move, turn, and interact with the box to solve it.
 
+Try picking up the box and dropping it on the button to open the door.
 
-
-Available Commands:
-
-move() - move 1 number of spaces.
-turn(x) - turn x degrees (can be negative!).
-pickup() - pickup the box in front of your drone.
-drop() - drop the box in the square in front of you.
+Available Commands
+move() - move the drone forward by 1 space.
+turn(x) - turn the drone by x degrees.
+pickup() - pick up the box in front of the drone.
+drop() - drop the box in the square in front of the drone.

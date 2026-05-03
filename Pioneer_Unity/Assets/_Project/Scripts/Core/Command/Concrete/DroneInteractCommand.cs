@@ -92,7 +92,7 @@ namespace Pioneer.Commands.Concrete
                     Debug.Log("[Interact] Auto mode detected a held box. Dropping it.");
                     Transform box = carryPoint.GetChild(0);
                     box.SetParent(null);
-                    box.position = droneTransform.position + (droneTransform.forward * interactDistance);
+                    box.position = droneTransform.position + droneTransform.forward;;
 
                     PickableBox boxComponent = box.GetComponent<PickableBox>();
                     if (boxComponent != null)
@@ -128,7 +128,7 @@ namespace Pioneer.Commands.Concrete
 
             // Raycast forward (in the Z direction local to the drone) to find a box
             Vector3 rayOrigin = droneTransform.position + (droneTransform.forward * 0.1f) + (Vector3.up * 0.1f);
-            if (Physics.Raycast(rayOrigin, droneTransform.forward, out RaycastHit hit, interactDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+            if (Physics.SphereCast(rayOrigin, 0.35f, droneTransform.forward, out RaycastHit hit, interactDistance, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Collide))
             {
                 Debug.Log($"[Interact] Raycast Hit: {hit.collider.name}");
 
@@ -146,6 +146,7 @@ namespace Pioneer.Commands.Concrete
                     if (boxRb != null)
                     {
                         boxRb.isKinematic = true;
+                        boxRb.detectCollisions = false;
                     }
 
                     Debug.Log($"[Interact] Successfully Picked Up: {box.name}");

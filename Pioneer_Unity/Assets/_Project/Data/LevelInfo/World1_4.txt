@@ -1,0 +1,28 @@
+World 1: Level 4
+
+This level introduces logic gates.
+
+In this puzzle, the door is controlled by an AND gate.
+An AND gate only returns true when both inputs are true.
+That means both conditions in the level must be satisfied before the final door opens.
+
+Think of the buttons as inputs and the door as the output.
+If either input is false, the output is false.
+If both inputs are true, the output is true and the door will open.
+
+Truth Table for AND
+A     | B     | Output
+False | False | False
+False | True  | False
+True  | False | False
+True  | True  | True
+
+Use this to work out which objects need to be activated before the final door opens.
+
+This is an AND gate puzzle. Both inputs must be true for the door to open.
+
+Available Commands
+move() - move the drone forward by 1 space.
+turn(x) - turn the drone by x degrees.
+pickup() - pick up the box in front of the drone.
+drop() - drop the box in the square in front of the drone.

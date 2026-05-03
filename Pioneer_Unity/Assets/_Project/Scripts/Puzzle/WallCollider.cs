@@ -9,21 +9,34 @@ public class WallCollider : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log($"[Wall] Drone crashed into {gameObject.name}!");
+            HandleCrash();
+        }
+    }
 
-            // Trigger the puzzle failed screen instead of hard reloading the scene
-            FeedbackManager feedbackManager = Object.FindFirstObjectByType<FeedbackManager>();
-            if (feedbackManager != null)
-            {
-                feedbackManager.ShowFailure();
-            }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            HandleCrash();
+        }
+    }
 
-            // Make sure to stop the drone's command queue if requested
-            if (stopQueueOnCrash)
-            {
-                CommandQueue queue = Object.FindFirstObjectByType<CommandQueue>();
-                if (queue != null) queue.Stop();
-            }
+    private void HandleCrash()
+    {
+        Debug.Log($"[Wall] Drone crashed into {gameObject.name}!");
+
+        // Trigger the puzzle failed screen instead of hard reloading the scene
+        FeedbackManager feedbackManager = Object.FindFirstObjectByType<FeedbackManager>();
+        if (feedbackManager != null)
+        {
+            feedbackManager.ShowFailure();
+        }
+
+        // Make sure to stop the drone's command queue if requested
+        if (stopQueueOnCrash)
+        {
+            CommandQueue queue = Object.FindFirstObjectByType<CommandQueue>();
+            if (queue != null) queue.Stop();
         }
     }
 }
