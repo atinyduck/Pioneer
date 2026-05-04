@@ -34,8 +34,8 @@ def process_player_code(raw_code):
         def move(steps=1):
           command_list.append({"action": "move", "value": steps})
 
-        def turn(x):
-            command_list.append({"action": "turn", "value": x})
+        def turn(degrees=90):
+            command_list.append({"action": "turn", "value": degrees})
 
         def pickup():
           command_list.append({"action": "pickup", "value": 0})
