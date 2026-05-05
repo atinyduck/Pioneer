@@ -12,4 +12,4 @@ Available Commands
 move() - move the drone forward by 1 space.
 turn(x) - turn the drone by x degrees.
 pickup() - pick up the box in front of the drone.
-drop() - drop the box in the square in front of the drone.
+drop() - drop the box below the drone.

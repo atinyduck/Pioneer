@@ -92,7 +92,7 @@ namespace Pioneer.Commands.Concrete
                     Debug.Log("[Interact] Auto mode detected a held box. Dropping it.");
                     Transform box = carryPoint.GetChild(0);
                     box.SetParent(null);
-                    box.position = droneTransform.position + droneTransform.forward;;
+                    box.position = droneTransform.position;
 
                     PickableBox boxComponent = box.GetComponent<PickableBox>();
                     if (boxComponent != null)
