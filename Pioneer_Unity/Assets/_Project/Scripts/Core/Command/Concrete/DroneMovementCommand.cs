@@ -1,6 +1,6 @@
 // DroneMovementCommand.cs
 // Written by:      Jake Morgan
-// Last Updated:    24/04/2026
+// Last Updated:    15/03/2026
 
 using System.Collections;
 using UnityEngine;
@@ -28,10 +28,7 @@ namespace Pioneer.Commands.Concrete
         {
             float duration = distance / speed;
             Vector3 startPosition = droneTransform.position;
-            // Target position based on local forward (Z-axis in 3D)
-            Vector3 targetPosition = startPosition + (droneTransform.forward * distance);
-
-            Debug.Log($"[Command] Starting Movement: Moving from {startPosition} to {targetPosition}");
+            Vector3 targetPosition = startPosition + droneTransform.forward * distance;
 
             // Check for blocking colliders before translating the drone manually.
             Vector3 rayOrigin = startPosition + (droneTransform.forward * 0.1f);
@@ -64,10 +61,6 @@ namespace Pioneer.Commands.Concrete
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
-
-            // Snap to exact target to prevent floating point errors over time
-            droneTransform.position = targetPosition; 
-            Debug.Log($"[Command] Finished Movement: Arrived at {droneTransform.position}");
         }
 
         private bool IsBlockingHit(Collider hitCollider)
