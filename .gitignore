@@ -1,1 +1,8 @@
 /Builds/
+PioneerBuilds/
+Pioneer_Unity/Library/
+Pioneer_Unity/Logs/
+Pioneer_Unity/Temp/
+Pioneer_Unity/obj/
+Pioneer_Unity/UserSettings/
+Pioneer_Unity/Build/
