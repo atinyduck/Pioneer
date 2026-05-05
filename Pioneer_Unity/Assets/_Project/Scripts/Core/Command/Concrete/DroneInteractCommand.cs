@@ -57,7 +57,7 @@ namespace Pioneer.Commands.Concrete
                 box.SetParent(null);
 
                 // Place it in front of the drone (using 'forward' for 3D grid)
-                box.position = droneTransform.position + (droneTransform.forward * interactDistance);
+                box.position = droneTransform.position + droneTransform.forward;
                 PickableBox boxComponent = box.GetComponent<PickableBox>();
                 if (boxComponent != null)
                 {
@@ -92,7 +92,7 @@ namespace Pioneer.Commands.Concrete
                     Debug.Log("[Interact] Auto mode detected a held box. Dropping it.");
                     Transform box = carryPoint.GetChild(0);
                     box.SetParent(null);
-                    box.position = droneTransform.position;
+                    box.position = droneTransform.position + droneTransform.forward;
 
                     PickableBox boxComponent = box.GetComponent<PickableBox>();
                     if (boxComponent != null)
